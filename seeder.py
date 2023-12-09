@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 # .envファイルの読み込み
 load_dotenv()
 
-# 環境変数からデータベース接続設定を取得
+# .envのデータベース接続設定を取得
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = int(os.getenv("DB_PORT"))  # ポート番号を整数に変換
 DB_NAME = os.getenv("DB_NAME")
@@ -25,10 +25,8 @@ def fetch_pokemon_data(pokemon_id):
         response.raise_for_status()  # ステータスコードが200系以外の場合、例外を発生させる
         data = response.json()
 
-        # ポケモンの種族情報を取得するためのURL
-        species_url = data["species"]["url"]
-
         # 種族情報から日本語の名前を取得
+        species_url = data["species"]["url"]
         species_response = requests.get(species_url)
         species_response.raise_for_status()
         species_data = species_response.json()
@@ -56,7 +54,7 @@ def fetch_pokemon_data(pokemon_id):
             if japanese_type_name:
                 types.append(japanese_type_name)
 
-        # 統計データを取得
+        # 種族値を取得
         stats = {s["stat"]["name"]: s["base_stat"] for s in data["stats"]}
 
         # 画像のURLを取得
@@ -91,10 +89,11 @@ def save_pokemon_to_db(pokemon_data):
             dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT
         ) as conn:
             with conn.cursor() as cursor:
-                # テーブルが存在しない場合、作成
+                # スキーマ、テーブルが存在しない場合、作成
+                cursor.execute("CREATE SCHEMA IF NOT EXISTS public")
                 cursor.execute(
                     """
-                    CREATE TABLE IF NOT EXISTS pokemon (
+                    CREATE TABLE IF NOT EXISTS public.pokemon (
                         id SERIAL PRIMARY KEY,
                         name_jp VARCHAR(255),
                         height FLOAT,
@@ -106,7 +105,7 @@ def save_pokemon_to_db(pokemon_data):
                     """
                 )
 
-                # JSON形式で統計データを保存
+                # JSON形式で種族値を保存
                 stats_json = json.dumps(pokemon_data["stats"])
 
                 # データを挿入
@@ -130,7 +129,7 @@ def save_pokemon_to_db(pokemon_data):
 
 
 def main():
-    for pokemon_id in range(1, 152):  # 例として最初の151匹のポケモンを取得
+    for pokemon_id in range(1, 810):  # 809匹のポケモンを取得（メルメタルまで）
         pokemon_data = fetch_pokemon_data(pokemon_id)
         save_pokemon_to_db(pokemon_data)
 
