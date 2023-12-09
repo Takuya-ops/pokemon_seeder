@@ -72,9 +72,8 @@ def save_pokemon_to_db(pokemon_data):
         print(f"Error: {e}")
 
 
-# スクリプトのメイン部分
 def main():
-    for pokemon_id in range(1, 10):  # 例として最初の809匹のポケモンを取得
+    for pokemon_id in range(1, 11):  # 例として最初の10匹のポケモンを取得
         pokemon_data = fetch_pokemon_data(pokemon_id)
         save_pokemon_to_db(pokemon_data)
 
