@@ -1,3 +1,4 @@
+# 必要モジュール
 import requests
 import psycopg2
 import sys
