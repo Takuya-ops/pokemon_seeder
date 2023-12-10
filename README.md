@@ -50,4 +50,5 @@ https://www.beekeeperstudio.io/
 https://www.pgadmin.org/download/
 
 以下のようにデータが投入されていれば成功です。
-<img width="1389" alt="スクリーンショット 2023-12-09 16 29 30" src="https://github.com/Takuya-ops/pokemon_seeder/assets/83127305/35df6145-6c3b-4724-a714-b8bc1f2ba951">
+<img width="1440" alt="スクリーンショット 2023-12-09 23 03 01" src="https://github.com/Takuya-ops/pokemon_seeder/assets/83127305/38ee2fd0-8c72-458e-92f8-ee44a95011e6">
+
